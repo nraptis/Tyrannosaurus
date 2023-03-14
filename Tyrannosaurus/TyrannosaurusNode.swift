@@ -10,16 +10,18 @@ import SceneKit
 
 class TyrannosaurusNode: SCNNode {
     
-    
-    
     private let sliceBody = TyrannosaurusSliceNode(name: "rex_body_")
     private let sliceEyeLeft = TyrannosaurusSliceNode(name: "rex_eye_left_")
     private let sliceEyeRight = TyrannosaurusSliceNode(name: "rex_eye_right_")
     private let sliceSpikes = TyrannosaurusSliceNode(name: "rex_spikes_")
     
-    private let textureBody = UIImage(named: "rex_uvw")
-    private let textureEye = UIImage(named: "rex_eye_uvw")
+    private let textureBodyDiffuse = UIImage(named: "rex_body_diffuse")
+    private let textureBodyNormal = UIImage(named: "rex_body_normal")
+    private let textureBodyDisplacement = UIImage(named: "rex_body_displacement")
+    private let textureBodySpecular = UIImage(named: "rex_body_specular")
     
+    private let textureEyeDiffuse = UIImage(named: "rex_eyes_diffuse")
+    private let textureEyeNormal = UIImage(named: "rex_eyes_normal")
     
     var animationFrame: Float = 0.0
     let animationFrameCount: Int
@@ -35,13 +37,29 @@ class TyrannosaurusNode: SCNNode {
         animationFrameCount = _animationFrameCount
         animationFrameCountFloat = Float(animationFrameCount)
         
-        if let textureBody = textureBody {
-            sliceBody.setDiffuse(image: textureBody)
-            sliceSpikes.setDiffuse(image: textureBody)
+        if let textureBodyDiffuse = textureBodyDiffuse {
+            sliceBody.setDiffuse(image: textureBodyDiffuse)
+            sliceSpikes.setDiffuse(image: textureBodyDiffuse)
         }
-        if let textureEye = textureEye {
-            sliceEyeLeft.setDiffuse(image: textureEye)
-            sliceEyeRight.setDiffuse(image: textureEye)
+        
+        if let textureBodyNormal = textureBodyNormal {
+            sliceBody.setNormal(image: textureBodyNormal)
+            sliceSpikes.setNormal(image: textureBodyNormal)
+        }
+        
+        if let textureBodySpecular = textureBodySpecular {
+            sliceBody.setSpecular(image: textureBodySpecular)
+            sliceSpikes.setSpecular(image: textureBodySpecular)
+        }
+        
+        if let textureEyeDiffuse = textureEyeDiffuse {
+            sliceEyeLeft.setDiffuse(image: textureEyeDiffuse)
+            sliceEyeRight.setDiffuse(image: textureEyeDiffuse)
+        }
+        
+        if let textureEyeNormal = textureEyeDiffuse {
+            sliceEyeLeft.setDiffuse(image: textureEyeNormal)
+            sliceEyeRight.setDiffuse(image: textureEyeNormal)
         }
         
         super.init()
@@ -153,6 +171,23 @@ fileprivate class TyrannosaurusSliceNode: SCNNode {
         for geometry in geometries {
             if let firstMaterial = geometry.firstMaterial {
                 firstMaterial.diffuse.contents = image
+            }
+        }
+    }
+    
+    func setSpecular(image: UIImage) {
+        for geometry in geometries {
+            if let firstMaterial = geometry.firstMaterial {
+                firstMaterial.specular.contents = image
+            }
+        }
+    }
+    
+    func setNormal(image: UIImage) {
+        for geometry in geometries {
+            if let firstMaterial = geometry.firstMaterial {
+                firstMaterial.normal.contents = image
+                firstMaterial.normal.intensity = 0.25
             }
         }
     }
