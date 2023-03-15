@@ -17,7 +17,6 @@ class TyrannosaurusNode: SCNNode {
     
     private let textureBodyDiffuse = UIImage(named: "rex_body_diffuse")
     private let textureBodyNormal = UIImage(named: "rex_body_normal")
-    private let textureBodyDisplacement = UIImage(named: "rex_body_displacement")
     private let textureBodySpecular = UIImage(named: "rex_body_specular")
     
     private let textureEyeDiffuse = UIImage(named: "rex_eyes_diffuse")
@@ -80,7 +79,7 @@ class TyrannosaurusNode: SCNNode {
     
     func update() {
         if animationFrameCountFloat > 0.0 {
-            animationFrame += 0.64
+            animationFrame += 0.6
             if animationFrame > animationFrameCountFloat {
                 animationFrame -= animationFrameCountFloat
             }
@@ -97,6 +96,12 @@ fileprivate class TyrannosaurusSliceNode: SCNNode {
     let geometries: [SCNGeometry]
     
     required init(name: String) {
+        
+        let indexData = Self.load(name: name + "indices") ?? Data()
+        let indexElement = SCNGeometryElement(data: indexData,
+                                              primitiveType: .triangles,
+                                              primitiveCount: indexData.count / 6,
+                                              bytesPerIndex: 2)
         
         var baseSources = [SCNGeometrySource]()
         
@@ -144,11 +149,7 @@ fileprivate class TyrannosaurusSliceNode: SCNNode {
                 sources.append(normalsSource)
             }
             
-            let indexData = Self.load(name: name + "indices") ?? Data()
-            let indexElement = SCNGeometryElement(data: indexData,
-                                                  primitiveType: .triangles,
-                                                  primitiveCount: indexData.count / 6,
-                                                  bytesPerIndex: 2)
+            
             
             let geometry = SCNGeometry(sources: sources,
                                        elements: [indexElement])

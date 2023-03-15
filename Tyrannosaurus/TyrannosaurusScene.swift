@@ -8,7 +8,7 @@
 import Foundation
 import SceneKit
 
-final class TyrannosaurusScene: SCNScene, SCNSceneRendererDelegate {
+final class TyrannosaurusScene: SCNScene {
 
     let tyrannosaurusNode = TyrannosaurusNode()
 
@@ -21,10 +21,6 @@ final class TyrannosaurusScene: SCNScene, SCNSceneRendererDelegate {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-    }
-    
-    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        tyrannosaurusNode.update()
     }
     
     private func applyLighting() {
@@ -61,4 +57,10 @@ final class TyrannosaurusScene: SCNScene, SCNSceneRendererDelegate {
         rootNode.addChildNode(lightNodeAmbient)
     }
 
+}
+
+extension TyrannosaurusScene: SCNSceneRendererDelegate {
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        tyrannosaurusNode.update()
+    }
 }
